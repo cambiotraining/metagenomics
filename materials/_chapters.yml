@@ -1,5 +1,7 @@
 book:
   chapters:
-    - part: "Part I"
+    - part: "Day 1"
       chapters:
-        - materials/00-template.md
+        - materials/01-intro_pres.md
+        - materials/02-recap_sess.md
+        - materials/03-16S_seq.md
