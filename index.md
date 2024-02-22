@@ -1,32 +1,32 @@
 ---
 title: "Introduction to Metagenomics"
-author: "Lajos Kalmar"
+author: "Sina Beier, Rui Guan, Lajos Kalmar"
 date: today
 number-sections: false
 ---
 
 ## Overview 
 
-Include a one-paragraph summary of the course here. 
+Metagenomics is an emerging technique to explore the composition of complex microbial communities, find species or genes of interest in samples with high diversity. This course covers multiple different approaches in metagenomics and covers the bioinformatics analysis part of those.
 
 ::: {.callout-tip}
 ### Learning Objectives
 
-- List course learning objectives here.
-- These describe concepts the learners should grasp and techniques they should be able to use by the end of the course.
-- You can think of these as completing the phrase "after this course, the participant should be able to..."
-- They are not supposed to be as detailed as the learning objectives of each section, but more high-level.
+- Questions you can ask and answers you may expect when using metagenomics approaches
+- Understand the fundamentals, advantages, disadvantages and potential biases of different approaches
+- Be aware of the requirements (knowledge, time, money, hardware) of different approaches
+- Learn about different bioinformatics pipelines in metagenimics data analysis
 :::
 
 
 ### Target Audience
 
-Brief description of target audience here.
+This course was designed for researchers, healthcare and public health professionals with extensive wet-lab  but limited bioinformatics experience.
 
 
 ### Prerequisites
 
-Detail any prerequisite skills needed to attend this course, with links to other relevant materials/courses if possible.
+The course builds up the knowledge gradually, making it suitable for everyone even without much previous knowledge. However, even if the course includes a short recap session, it is recommended to have a basic understanding of next-generation sequencing techniques, Unix / Linux comman line usage and R / RStudio usage.
 
 
 <!-- Training Developer note: comment the following section out if you did not assign levels to your exercises -->
@@ -49,9 +49,17 @@ These examples include icons with links to GitHub and Orcid.
 
 About the authors:
 
-- **Lajos Kalmár**
+- **Sina Beier**
+  <a href="https://orcid.org/0000-0002-8230-4256" target="_blank"><i class="fa-brands fa-orcid" style="color:#a6ce39"></i></a>  
+  _Affiliation_: Staff Bioinformatician, MRC Toxicology, University of Cambridge  
+  _Roles_: writing; coding; revision
+- **Rui Guan**
+  <a href="https://github.com/Guan06" target="_blank"><i class="fa-brands fa-github" style="color:#a6ce39"></i></a>  
+  _Affiliation_: Post-doc Bioinformatician, MRC Toxicology, University of Cambridge  
+  _Roles_: writing; coding; revision
+- **Lajos Kalmar**
   <a href="https://orcid.org/0000-0003-3691-8350" target="_blank"><i class="fa-brands fa-orcid" style="color:#a6ce39"></i></a>  
-  _Affiliation_: MRC Toxicology, University of Cambridge  
+  _Affiliation_: Bioinformatics Facility Manager, MRC Toxicology, University of Cambridge  
   _Roles_: writing - original draft; conceptualisation; coding
 
 
@@ -62,29 +70,5 @@ About the authors:
 Please cite these materials if:
 
 - You adapted or used any of them in your own teaching.
-- These materials were useful for your research work. For example, you can cite us in the methods section of your paper: "We carried our analyses based on the recommendations in _TODO_.".
+- These materials were useful for your research work. 
 
-You can cite these materials as:
-
-> TODO
-
-Or in BibTeX format:
-
-```
-@Misc{,
-  author = {},
-  title = {},
-  month = {},
-  year = {},
-  url = {},
-  doi = {}
-}
-```
-
-
-## Acknowledgements
-
-<!-- if there are no acknowledgements we can delete this section -->
-
-- List any other sources of materials that were used.
-- Or other people that may have advised during the material development (but are not authors).

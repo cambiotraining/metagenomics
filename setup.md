@@ -29,6 +29,7 @@ Download and unzip the folder to your Desktop to follow along with the materials
 
 ## Software
 
+<!--
 ### Quarto
 
 To develop and render the course materials website, you will need to install _Quarto_:
@@ -37,8 +38,8 @@ To develop and render the course materials website, you will need to install _Qu
 - If you are developing materials using executable `.qmd` documents, it is recommended that you also install the extensions for your favourite IDE (e.g. RStudio, VS Code).
 - If you are developing materials using **JupyterLab** or **Jupyter Notebooks**, please install [Jupytext](https://jupytext.readthedocs.io/en/latest/install.html).
   - Use the [paired notebook](https://jupytext.readthedocs.io/en/latest/paired-notebooks.html) feature to have synchronised `.ipynb`/`.qmd` files. Only `.qmd` files should be pushed to the repository (`.ipynb` files have been added to `.gitignore`).
+-->
 
-<!--
 ### R and RStudio
 
 ::: {.tabset group="os"}
@@ -64,10 +65,7 @@ Download and install all these using default options:
 - Download the [RStudio](https://www.rstudio.com/products/rstudio/download/#download) installer for your distribution and install it using your package manager.
 
 :::
--->
 
-
-<!--
 ### Conda
 
 Open a terminal and run:
@@ -82,7 +80,6 @@ conda install -y mamba
 ```
 
 Note: Windows users can use WSL2 (see @wsl).
--->
 
 <!--
 ### Singularity
