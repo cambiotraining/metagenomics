@@ -57,6 +57,10 @@ About the authors:
   <a href="https://github.com/Guan06" target="_blank"><i class="fa-brands fa-github" style="color:#a6ce39"></i></a>  
   _Affiliation_: Post-doc Bioinformatician, MRC Toxicology, University of Cambridge  
   _Roles_: writing; coding; revision
+- **Oliver Lorenz**
+  <a href="https://www.sanger.ac.uk/person/lorenz-oliver/" target="_blank"><i class="fa-brands" style="color:#a6ce39"></i></a>  
+  _Affiliation_: Bioinformatician, Wellcome Sanger Institute  
+  _Roles_: writing; coding
 - **Lajos Kalmar**
   <a href="https://orcid.org/0000-0003-3691-8350" target="_blank"><i class="fa-brands fa-orcid" style="color:#a6ce39"></i></a>  
   _Affiliation_: Bioinformatics Facility Manager, MRC Toxicology, University of Cambridge  
