@@ -2,6 +2,92 @@
 title: Practical
 ---
 
+## Finding a known genome in mixed microbial community
+
+The following practical simulates the situation when we know what we are looking for and utilise a whole-genome alignment approach to find a particular bacterial strain or virus genome in a highly complex microbial community. This technique is especially useful if the known species (potential pathogen) is hard to detect / culture with traditional laboratory methods, amplification-based methods are not specific enough (e.g., often false positive due to a common species with highly similar genome), the laboratory method requires more time and/or more expensive.
+
+::: {.callout-tip}
+#### Key Points to consider
+
+- The closer the genome you use to the known species / strain the higher sensitivity and specificity can be achieved. If you are monitoring an outbreak with this approach, the best results can be achieved if you can isolate the microbe at least once and perform a whole genome sequencing and de novo assembly on it.
+- If you plan to quantify the tracked species, you can have a broad idea (relative abundance) by comparing the aligned read number to the total number of reads in the raw data. You can achieve much better quantification (both relative and absolute) if you spike in your sample (before DNA extraction) with a known bacteria or virus, using a well-defined amount. Ideally the spiked in species should be a distant species in terms of phylogeny and should have similarish genome size.
+- If you don't have your own reference genome, try to find one in public databases that is potentially the closest to your geographical location but also a recent isolate.
+:::
+
+### Standard quality control and pre-processing of shotgun metagenomics raw data
+
+Before we perform any analysis on the raw data it is important to perform the basic quality control checks and if needed certain pre-processing and filtering steps to ensure that we are working with high quality data. When you open a new terminal in the training environment, your working directory should be the `~/Course_Materials` folder. You can always check where you are in the filesystem by using the `pwd` command or just by checking your `bash` prompt.
+
+Switch to the folder with the raw data, check the usage of the application and run `fastqc` on our first example raw data set (a pair of FASTQ files simulating a paired-end sequencing data).
+
+```bash
+cd sg_raw_data/
+fastqc -h
+fastqc mixed_bacterial_community_5M_R1.fastq.gz mixed_bacterial_community_5M_R2.fastq.gz
+```
+::: {.callout-exercise}
+#### Inspect the output of the FastQC application
+
+FastQC generatesgraphical output report in `.html` format. This is often placed (and archived) together with the raw data files, so the quality measures can be quickly checked in the case of future usage.
+
+Open the Html files and go through the graphs, discuss what you see. For a future reference, and to see more examples (good and bad data), please visit the [FastQC website](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+:::
+
+The next standard pre-processing step is to remove adapter, primer and other unwanted sequences from your reads. These sequence contents are side products of the next-generation sequencing technique, and as they are not coming from the template DNA, they can interfere from many downstream pipeline steps. One of the most commonly used tool for this purpose is [cutadapt](https://cutadapt.readthedocs.io/en/stable/). Check the command line help for the application and run the filtering step on the raw sequencing data (please note, that you have to activate the `metagenomics` conda environment if it is not yet active).
+
+```bash
+conda activate metagenomics
+
+cutadapt -h
+
+cutadapt -a CTGTCTCTTATACACATCT -A ATGTGTATAAGAGACA \
+-o mixed_bacterial_community_5M_noadapt_R1.fastq.gz -p mixed_bacterial_community_5M_noadapt_R2.fastq.gz \
+mixed_bacterial_community_5M_R1.fastq.gz mixed_bacterial_community_5M_R2.fastq.gz
+
+```
+
+The final standard pre-processing step is to remove bad quality sequencing from our raw data. Typically the 5' and 3' ends of the sequencing reads have lover quality (so it is worth to remove these ends), and it is also common that a few reads are in general bad quality. We will use the [trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic) application to perform this quality filtering step, please refer to the on-line website or the command line help (`trimmomatic -h`) for more information on usage and fine-tuning.
+
+```bash
+trimmomatic PE -phred33 mixed_bacterial_community_5M_noadapt_R1.fastq.gz mixed_bacterial_community_5M_noadapt_R2.fastq.gz \
+mixedcomm_forward_paired.fq.gz mixedcomm_forward_unpaired.fq.gz \
+mixedcomm_reverse_paired.fq.gz mixedcomm_reverse_unpaired.fq.gz \
+LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+```
+::: {.callout-tip}
+- Please note, that we are defining output file names for both the filtered paired-end and unpaired reads. While our input is coming from a paired-end library, it is possible that one mate of a read pair has bad quality while the other mate is good enough to carry forward. In this case the good read will be carried forward as unpaired read.
+- To be able to use the `trimmomatic` tool efficiently, you have to have a good understanding of both the sequencing technique, the significance of potential errors and warnings listed in the `FastQC` report and the usage of the many different options and parameters in the `trimmomatic` application itself.
+:::
+
+::: {.callout-exercise}
+#### Re-analyse the filtered raw data with FastQC and compare it to the original report
+{{< level 2 >}}
+Run the `fastqc` step again but this time giving the output files of the `trimmomatic` step to the application. Compare the reports and graphs and discuss the differences with the trainers.
+
+::: {.callout-answer}
+To run the `fastqc` on the `trimmomatic` output, you just simply list the new file names after the command. The new `.html` files will be generated next to the files:
+```bash
+fastqc mixedcomm_forward_paired.fq.gz \
+mixedcomm_forward_unpaired.fq.gz \
+mixedcomm_reverse_paired.fq.gz \
+mixedcomm_reverse_unpaired.fq.gz
+```
+:::
+:::
+
+### Obtaing and preparing the reference genome for alignment
+
+Reference genomes are commonly stored in [FASTA](21-pres.html#file-and-data-formats) formatted files. If the genome contains multiple DNA species (e.g., mutliple chromosomes or genome + plasmid) it is still stored in a single FASTA file, but in a multi-FASTA format, where each DNA species has its own FASTA header. These genome files can be generated (e.g., by bacterial colony sequencing and de novo assembly) or be downloaded from on-line genome databases. The most commonly used general databases are [Ensembl](https://www.ensembl.org/index.html), [NCBI GenBank](https://www.ncbi.nlm.nih.gov/genbank/), [NCBI RefSeq](https://www.ncbi.nlm.nih.gov/refseq/) and the metagenomics specific [MGnify](https://www.ebi.ac.uk/metagenomics).
+
+There are multiple reference genome files saved in the `Course_Materials/sg_reference/` directory, for this exercise we will use the the reference genome of the Escherichia coli O157:H7 strain.
+
+```bash
+cd ~/Course_Materials/sg_reference/
+
+
+```
+
+
 ```bash
 ####### Day 2, Alignment-based complete compositional profiling of complex microbial communities ########
 
