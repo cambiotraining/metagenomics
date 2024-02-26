@@ -56,4 +56,58 @@ Managing data from metagenomics experiments can be a challenge due to the size o
 
 :::
 
-[Alignment based metagenomics](https://docs.google.com/presentation/d/1Q1mzNO-nOi0dYjK1l9Ig6b1Gpu-JdRvuQkxvXe-ozJU/edit?usp=sharing)
+## Alignment based metagenomics
+
+The slides for this presentation section can be found on google slides on the [following link](https://docs.google.com/presentation/d/1Q1mzNO-nOi0dYjK1l9Ig6b1Gpu-JdRvuQkxvXe-ozJU/edit?usp=sharing)
+
+### Fundamentals of alignment based approaches
+
+In the alignment based metagenomics approaches we try to find the best matches for our sequencing data among known reference genomes. Match can mean perfect (nucleotide by nuclotide), imperfect (nuclotide changes, insertions, deletions allowed) alignments along the full length of the short read (global alignment) or just within fragments of it (local alignment, hash based methods). From the alignment results, we can derive multiple information: (i) presence / absence of a certain species; (ii) relative abundance of a species (based on alignment coverage data); (iii) genetic distance of a certain species / strain from the closest homologue (based on genetic variations and genome structural homology); (iv) presence / absence of certain genes in a species (e.g., antimicrobial resistance or virulance genes).
+
+::: {.callout-tip}
+#### Key Points
+
+- You can only find species / genes with alignment based techniques if you have something similar in your reference database.
+- Due to our significantly better knowledge on pathogen species, alignement based methods will always be a bit biased towards well-known species (compared to e.g., commensals in the gut microbiome).
+- Alignment based methods are very sensitive and specific to find known genetic material but have severe limitations in discovering emerging, previously unknown species / plasmids / genes.
+
+:::
+
+### K-mer based profiling
+
+In k-mer based methods we randomly extract short nucleotide sequences from reference genomes (fragment size is usually between 16-32 nucleotides, number of fragments ranging from few hundred to several thousands) and screen raw sequencing data (FASTQ files) or assembled contigs (FASTA files) for perfect matching. The theory is, that if we have a certain genome / species in our mixed community high percentage of the fragments, originally extracted from that genome, will show perfect matching with the short reads or the assembled contigs. By defining the sensitivity threshold, we can obtain presence / absence information, by counting an average number of exact matches for all k-mers from the same genome, we can derive abundance information. The most commonly used general k-mer based application is [Mash](https://mash.readthedocs.io/en/latest/), while a bit more microbiology and metagenomics optimised application is [Kraken](https://ccb.jhu.edu/software/kraken2/).
+
+::: {.callout-tip}
+#### Key Points
+
+- K-mer based methods provide the fastest way to profile shutgun metagenomics raw data. These methods have also relatively low computational resource requirements (CPU, memory).
+- As all alignment based methods, k-mer based methods sensitivity and reliability is highly dependent on our previous knowledge (our initial database).
+- While species level identification is possible with k-mer based approach, strain specific resolution is challenging.
+- As the selection of k-mers from the reference genomes is random, the presence / absence of specific k-mers rarely have any biological meaning.
+:::
+
+### Marker gene detection based profiling
+
+As our knowledge grows in identifying novel microbial genomes, we can compare these genomes and identify genes / gene families that are specific to certain taxonomic levels. This way, we are able to use small subsets of the genome (smaller database, faster bioinformatics pipeline) in the identification of our complex community members. The method provides a biologically meaningful way (as we actually searching for genes) to detect the presence of a previously completely unknown genome and potentially assign to a taxonomic category (even if not identified on species level, we may be able to assign a genus or a family). In this approach the reference gene databases are provided by the software developers (as their generation / modification is not a simple task), so the user has to be very careful of using a well maintained and up-to-date application / database.
+
+::: {.callout-tip}
+#### Key Points
+
+- Marker gene based methods are usually require slightly more computational resources compared to the k-mer based methods but still have relatively low resource needs (a high-spec desktop or laptop can usually handle the task).
+- Marker gene based methods can reliably detect the microbial community members on the species level, further refinement of the gene sequences and polymorphisms (e.g., by using [StrainPhlAn](https://github.com/biobakery/MetaPhlAn/wiki/StrainPhlAn-4.1)) can resolve the genomes in strain level.
+
+:::
+
+### Whole genome alignment based detection and profiling
+
+The most sensitive and specific detection of a certain species or strain of a microbial genome from shotgun metagenomics sequencing can be performed by aligning all raw reads to known whole genomes. While it is almost impossible to use all the known microbial genomes in one step and align reads to them, after a k-mer or marker gene based discovery, the high confidence / abundance genomes can be extracted from the raw data by specifically aligning the reads to the known genomes. Alignment based methods can also be utilised to reduce the amount of raw sequencing reads (for e.g., de novo metagenomics assembly where the amount of reads is in strong positive correlation with the analysis time and memory requirement), highly abundant known genomes and/or the host genome can be used to remove reads that are aligning to these and use the "remaining" raw data to do de novo assembly and novel genome discovery. An extreme example for the usage of alignment based methods is to eliminate certain genomes from a low complexity community (e.g., human blood where we suspect an unknown pathogen), and enriching the raw data for reads originating from the unknown genome.
+
+::: {.callout-tip}
+#### Key Points
+
+- Whole genome alignment methods in metagenomics rarely used to map the full composition landscape of the community (exceptions are the artificial communities with known components).
+- Use full genome alignment approach if you would like to find a specific species / strain with the highest specificity and sensitivity.
+- Use the alignment based in combination with a de novo approach to to save computational time and be able to use less resources in the de novo assembly.
+- Utilise the whole genome alignment approach to eliminate unwanted and/or well-known genomes from your raw data to make the furhter analysis steps more efficient.
+
+:::
