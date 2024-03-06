@@ -40,7 +40,7 @@ bowtie2-build -q Homo_sapiens.GRCh38.dna.chromosome.22.fa human_chr22
 
 cd ..
 
-bowtie2 --qc-filter -p 8 --local -x sg_reference/human_ch22 \
+bowtie2 --qc-filter -p 8 --local -x sg_reference/human_chr22 \
 -1 sg_raw_data/unknown_forward_paired.fq.gz \
 -2 sg_raw_data/unknown_reverse_paired.fq.gz \
 -S results/unknown_pathogen.sam
@@ -63,7 +63,7 @@ Refer to the command line help (`bowtie2 -h`) to read about the numerous options
 ::: {.callout-answer}
 ```bash
 bowtie2 --qc-filter -p 8 --local \
--x sg_reference/human_ch22 \
+-x sg_reference/human_chr22 \
 -U sg_raw_data/unknown_forward_paired.fq.gz,sg_raw_data/unknown_reverse_paired.fq.gz,sg_raw_data/unknown_forward_unpaired.fq.gz,sg_raw_data/unknown_reverse_unpaired.fq.gz \
 --un sg_raw_data/unknown_enriched.fastq > /dev/null
 ```
@@ -77,7 +77,7 @@ sg_raw_data/unknown_forward_unpaired.fq.gz \
 sg_raw_data/unknown_reverse_unpaired.fq.gz > unknown_unpaired_library.fastq
 
 bowtie2 --qc-filter -p 8 --local \
--x sg_reference/human_ch22 \
+-x sg_reference/human_chr22 \
 -U unknown_unpaired_library.fastq \
 --un sg_raw_data/unknown_enriched.fastq > /dev/null
 ```
