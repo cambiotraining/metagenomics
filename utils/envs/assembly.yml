@@ -1,0 +1,15 @@
+name: assembly
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - fastqc==0.12.1
+  - cutadapt==4.9
+  - trimmomatic==0.39
+  - bowtie2==2.5.4
+  - samtools==1.21
+  - spades==4.0.0
+  - bbmap==39.10
+  - flash==1.2.11
+  - multiqc==1.25.1
