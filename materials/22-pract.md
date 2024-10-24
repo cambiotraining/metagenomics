@@ -14,6 +14,16 @@ The following practical simulates the situation when we know what we are looking
 - If you don't have your own reference genome, try to find one in public databases that is potentially the closest to your geographical location but also a recent isolate.
 :::
 
+:::{.callout-important}
+#### Activate your software environment
+
+For this practical we need to activate the software environment called `alignment`:
+
+```bash
+mamba activate alignment
+```
+:::
+
 ### Standard quality control and pre-processing of shotgun metagenomics raw data
 
 Before we perform any analysis on the raw data it is important to perform the basic quality control checks and if needed certain pre-processing and filtering steps to ensure that we are working with high quality data. When you open a new terminal in the training environment, your working directory should be the `~/Course_Materials` folder. You can always check where you are in the filesystem by using the `pwd` command or just by checking your `bash` prompt.
@@ -33,11 +43,9 @@ FastQC generatesgraphical output report in `.html` format. This is often placed 
 Open the Html files and go through the graphs, discuss what you see. For a future reference, and to see more examples (good and bad data), please visit the [FastQC website](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 :::
 
-The next standard pre-processing step is to remove adapter, primer and other unwanted sequences from your reads. These sequence contents are side products of the next-generation sequencing technique, and as they are not coming from the template DNA, they can interfere from many downstream pipeline steps. One of the most commonly used tool for this purpose is [cutadapt](https://cutadapt.readthedocs.io/en/stable/). Check the command line help for the application and run the filtering step on the raw sequencing data (please note, that you have to activate the `metagenomics` conda environment if it is not yet active).
+The next standard pre-processing step is to remove adapter, primer and other unwanted sequences from your reads. These sequence contents are side products of the next-generation sequencing technique, and as they are not coming from the template DNA, they can interfere from many downstream pipeline steps. One of the most commonly used tool for this purpose is [cutadapt](https://cutadapt.readthedocs.io/en/stable/). Check the command line help for the application and run the filtering step on the raw sequencing data.
 
 ```bash
-conda activate metagenomics
-
 cutadapt -h
 
 cutadapt -a CTGTCTCTTATACACATCT -A ATGTGTATAAGAGACA \

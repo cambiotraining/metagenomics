@@ -6,6 +6,17 @@ title: Practical
 
 During this practical session we will bin the contigs to multiple clusters forming metagenome assembled genomes (MAGs). These MAGs ideally represent individual genomes, we will assign quality measures for these and do de novo gene annotation and specific gene discovery.
 
+:::{.callout-important}
+#### Activate your software environment
+
+For this practical we need to activate the software environment called `mags`:
+
+```bash
+mamba activate mags
+```
+:::
+
+
 ### Reference independent binning
 
 We will use the `maxbin2` algorithm to reconstruct the individual genomes of those bacteria that were sequenced in the artificial mixed community. The method uses genomic properties and contig coverage values to find clusters of contigs that are potentially coming from the same source (same genome). 

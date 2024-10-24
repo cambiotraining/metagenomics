@@ -6,18 +6,24 @@ title: Practical
 
 In this practical we are simulating a virus infection that is caused by a completely unknown virus. In this simulated dataset a novel genome is hidden in the raw data with a huge background of human genome sequence. This simulates a real scenario when a pathogen is in the blood or other (otherwise sterile) body fluid. To make the bioinformatics step faster we generated the human "background" from chromosome 22, so the database will be relatively small.
 
+:::{.callout-important}
+#### Activate your software environment
+
+For this practical we need to activate the software environment called `assembly`:
+
+```bash
+mamba activate assembly
+```
+:::
+
+
 ### QC and Pre-processing
 
 The raw date quality control and pre-processing is going the same way as we did with the mixed community data, for the details on these steps, please refer to [Day 2 practical material](22-pract.html#standard-quality-control-and-pre-processing-of-shotgun-metagenomics-raw-data).
 
 ```bash
-# Deactivate the metagenomics environment if you are in that
-conda deactivate
-
 cd sg_raw_data/
 fastqc unknown_pathogen_R1.fastq unknown_pathogen_R2.fastq
-
-conda activate metagenomics
 
 cutadapt -a CTGTCTCTTATACACATCT -A ATGTGTATAAGAGACA \
 -o unknown_pathogen_noadapt_R1.fastq -p unknown_pathogen_noadapt_R2.fastq \
@@ -116,11 +122,6 @@ The de novo assembly QC and pre-processing has the same first steps as any other
 As the assembly step time and resource need is correlating significantly with the amount of input data, we can use methods to reduce the amount of raw reads without loosing important data. We will use the `clumpify.sh` script (from the `bbmap` package) to remove duplicates (PCR or optical). This algorithm removes completely matching reads or read-pairs.
 
 ```bash
-
-# Be sure you have the metagenomics environment activated
-# if not...
-conda activate metagenomics
-
 clumpify.sh
 
 clumpify.sh in=mixedcomm_forward_paired.fq.gz in2=mixedcomm_reverse_paired.fq.gz \
