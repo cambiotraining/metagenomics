@@ -1,8 +1,8 @@
 ---
-title: Metagenome assembled genomes (MAGs)
+title: Metagenome assembled genomes (theory)
 ---
 
-## Working with metagenome assembled genomes (MAGs)
+## Metagenome assembled genomes (MAGs)
 
 After performing de novo assembly and binning on a shotgun metagenomics data, the results are individual FASTA files with sets of contigs, representing a potential genome. There are multiple inherent errors in binning that is not always easy to avoid or repaer, but at least it is important to discover.
 
