@@ -1,19 +1,11 @@
 book:
   chapters:
-    - part: "Day 1"
-      chapters:
-        - materials/11-intro_pres.md
-        - materials/12-recap_sess.md
-        - materials/13-16S_seq.md
-    - part: "Day 2"
-      chapters:
-        - materials/21-pres.md
-        - materials/22-pract.md
-    - part: "Day 3"
-      chapters:
-        - materials/31-pres.md
-        - materials/32-pract.md
-    - part: "Day 4"
-      chapters:
-        - materials/41-pres.md
-        - materials/42-pract.md
+    - materials/11-intro_pres.md
+    - materials/13-16S_seq.md
+    - materials/21-pres.md
+    - materials/22-pract.md
+    - materials/31-pres.md
+    - materials/32-pract.md
+    - materials/41-pres.md
+    - materials/42-pract.md
+    - materials/12-recap_sess.md

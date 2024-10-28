@@ -1,5 +1,5 @@
 ---
-title: Introduction
+title: Introduction to metagenomics
 ---
 
 ## Presentation on the fundamentals of metagenomics

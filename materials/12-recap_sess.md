@@ -1,5 +1,5 @@
 ---
-title: Recap session
+title: Recap session (optional)
 ---
 
 ## Presentation and demo on basic command line usage
