@@ -1,5 +1,5 @@
 ---
-title: Presentations
+title: De novo and Hi-C metagenomics (theory)
 ---
 ## De novo metagenomics and Hi-C metagenomics
 

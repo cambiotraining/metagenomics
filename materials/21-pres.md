@@ -1,5 +1,5 @@
 ---
-title: Presentations
+title: QC and alignment based metagenomics (theory)
 ---
 
 ## Data formats, QC and data management

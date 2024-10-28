@@ -1,5 +1,5 @@
 ---
-title: Presentation
+title: Metagenome assembled genomes (MAGs)
 ---
 
 ## Working with metagenome assembled genomes (MAGs)

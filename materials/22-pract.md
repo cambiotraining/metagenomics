@@ -1,5 +1,5 @@
 ---
-title: Practical
+title: QC and targeted alignment methods
 ---
 
 ## Finding a known genome in mixed microbial community
@@ -242,7 +242,7 @@ BAM files can be used for various other purposes:
 - Manipulating data in R by using the [Rsamtools](https://bioconductor.org/packages/release/bioc/html/Rsamtools.html) and [GenomicAlignments](https://bioconductor.org/packages/release/bioc/html/GenomicAlignments.html) packages
 :::
 
-## Compositional mapping of shutgun metagenomics data
+## Compositional mapping of shotgun metagenomics data
 
 The previously used whole-genome alignment based mapping method works very well if we know what we are looking for, e.g., we try to detect a known pathogen or follow the dynamic changes in a synthetic community. When we try to describe the composition of more complex communities the potential reference database would be so big using whole genomes (Bacteria + Archea + Fungi + Virus), so we apply different reduction strategies. The two main approaches are:(i) Finding biologically meaningful genetic signatures (e.g., genes that are only present in certain taxonomic group) and search for those in the raw data; (ii) extract numerous random short fragments from genomes and try to find exact matchings for those in the raw data.
 
