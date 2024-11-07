@@ -76,7 +76,7 @@ mixedcomm_reverse_unpaired.fq.gz
 
 ## Compositional mapping of shotgun metagenomics data
 
-The previously used whole-genome alignment based mapping method works very well if we know what we are looking for, e.g., we try to detect a known pathogen or follow the dynamic changes in a synthetic community. When we try to describe the composition of more complex communities the potential reference database would be so big using whole genomes (Bacteria + Archea + Fungi + Virus), so we apply different reduction strategies. The two main approaches are:(i) Finding biologically meaningful genetic signatures (e.g., genes that are only present in certain taxonomic group) and search for those in the raw data; (ii) extract numerous random short fragments from genomes and try to find exact matchings for those in the raw data.
+When we try to describe the composition of more complex communities the potential reference database would be so big using whole genomes (Bacteria + Archea + Fungi + Virus), so we apply different reduction strategies. The two main approaches are:(i) Finding biologically meaningful genetic signatures (e.g., genes that are only present in certain taxonomic group) and search for those in the raw data; (ii) extract numerous random short fragments from genomes and try to find exact matchings for those in the raw data.
 
 ### MASH, a random k-mer based profiling method
 
@@ -158,7 +158,7 @@ Notice, that in both cases not only the query genome came up with high number of
 
 ```bash
 mash screen -w mixed_community.msh NZ_CP034931.fa
-mash screen mixed_community.msh NZ_CP038419_1.fasta
+mash screen mixed_community.msh NZ_CP034931.fa
 
 mash screen -w mixed_community.msh NZ_CP038419_1.fasta
 mash screen mixed_community_hr.msh NZ_CP038419_1.fasta
