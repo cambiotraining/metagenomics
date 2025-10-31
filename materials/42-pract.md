@@ -1,5 +1,5 @@
 ---
-title: Practical
+title: Working with MAGs
 ---
 
 ## Binning, assigning quality and taxonomy to MAGs, Annotation

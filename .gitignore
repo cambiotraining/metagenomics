@@ -21,3 +21,8 @@ _site
 # Jupyter cache
 .jupyter_cache
 /.luarc.json
+
+**/*.quarto_ipynb
+
+# System files
+.DS_store
