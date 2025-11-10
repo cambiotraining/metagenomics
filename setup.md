@@ -58,10 +58,11 @@ In the R console, run the following commands to install all the necessary packag
 
 ```r
 install.packages("BiocManager")
-BiocManager::install(c("dada2", 
-                       "phyloseq", 
+BiocManager::install(c("dada2",
+                       "phyloseq",
+                       "microbiome",
                        "Biostrings",
-                       "readxl", 
+                       "readxl",
                        "tidyverse",
                        "factoextra"))
 ```
