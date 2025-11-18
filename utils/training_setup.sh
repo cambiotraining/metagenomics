@@ -44,3 +44,28 @@ mkdir -p $metaphlan_db
 metaphlan --install --bowtie2db $metaphlan_db
 
 conda env config vars set DEFAULT_DB_FOLDER="$metaphlan_db" -n alignment
+
+# adding an alias function to avoid downloading latest database each time
+cat << 'EOF' >> $CONDA_PREFIX/etc/conda/activate.d/metaphlan_alias.sh
+#!/bin/sh
+metaphlan() {
+  if [ ! -f "$DEFAULT_DB_FOLDER/mpa_latest" ]; then
+    echo "ERROR: metaphlan DEFAULT_DB_FOLDER not set"
+    return 1
+  fi
+
+  echo "Database folder: $DEFAULT_DB_FOLDER"
+  echo "Database version: $(cat $DEFAULT_DB_FOLDER/mpa_latest)"
+
+  command metaphlan \
+    --bowtie2db "$DEFAULT_DB_FOLDER" \
+    --index $(cat $DEFAULT_DB_FOLDER/mpa_latest) \
+    "$@"
+}
+export -f metaphlan
+EOF
+
+cat << 'EOF' >> $CONDA_PREFIX/etc/conda/deactivate.d/metaphlan_alias.sh
+#!/bin/sh
+unset -f metaphlan
+EOF
