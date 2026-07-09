@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# Stage dependencies in the steps below:
+# Stage 16  ←  Stage 15  ←  Stage 14  ←  (raw input files)
+# Stage 17  ←  Stage 7   ←  Stage 6   ←  (raw input files)
+# Stage 18  ←  Stage 17
+# Stages 19–23  ←  Stage 18 (metaspades contigs)
+
 set -euxo pipefail
 
 # Mamba environment names
@@ -20,8 +26,6 @@ REFERENCE_HUMAN_CHR22="sg_reference/Homo_sapiens.GRCh38.dna.chromosome.22.fa"
 MASH_DB_DEFAULT="sg_reference/RefSeqSketchesDefaults.msh"
 UNKNOWN_R1="sg_raw_data/unknown_pathogen_R1.fastq"
 UNKNOWN_R2="sg_raw_data/unknown_pathogen_R2.fastq"
-# Pre-existing assembly contigs (from overnight metaspades run); MAG stages are skipped if absent
-ASSEMBLY_CONTIGS="results/mixed_comm_de_novo/contigs.fasta"
 
 mkdir -p results
 WORKDIR="$(mktemp -d "results/training_machine_test.XXXXXX")"
@@ -159,15 +163,15 @@ run_in_alignment mash screen -w \
   "${WORKDIR}/trimmed/mixed_fwd_paired.fq.gz" \
   "${WORKDIR}/trimmed/mixed_rev_paired.fq.gz"
 
-# Screen against the RefSeq default database (large; runs with a timeout)
-run_with_timeout 60 run_in_alignment mash screen -w \
+# Screen against the RefSeq default database (large)
+run_in_alignment mash screen -w \
   "${MASH_DB_DEFAULT}" \
   "${WORKDIR}/trimmed/mixed_fwd_paired.fq.gz" \
   "${WORKDIR}/trimmed/mixed_rev_paired.fq.gz"
 
-echo "=== Stage 10: MetaPhlAn profiling (practical 22, with timeout) ==="
+echo "=== Stage 10: MetaPhlAn profiling (practical 22) ==="
 mkdir -p "${WORKDIR}/metaphlan"
-run_with_timeout 120 run_in_alignment metaphlan \
+run_in_alignment metaphlan \
   "${WORKDIR}/trimmed/mixed_fwd_paired.fq.gz,${WORKDIR}/trimmed/mixed_rev_paired.fq.gz" \
   --bowtie2out "${WORKDIR}/metaphlan/metaphlan.bowtie2.bz2" \
   --nproc 5 \
@@ -213,6 +217,7 @@ run_in_alignment samtools stats "${WORKDIR}/all_genomes_alignment_sorted.bam" \
 run_in_alignment samtools coverage "${WORKDIR}/all_genomes_alignment_sorted.bam"
 
 echo "=== Stage 14: QC and pre-processing of unknown pathogen reads (practical 23) ==="
+mkdir -p "${WORKDIR}/qc"
 run_in_assembly fastqc "${UNKNOWN_R1}" "${UNKNOWN_R2}" -o "${WORKDIR}/qc"
 run_in_assembly cutadapt \
   -a "${ADAPTER_FWD}" -A "${ADAPTER_REV}" \
@@ -242,8 +247,8 @@ run_in_assembly bowtie2 --qc-filter -p 8 --local \
   > /dev/null
 test -s "${WORKDIR}/unknown_enriched.fastq"
 
-echo "=== Stage 16: SPAdes single genome assembly (practical 23, with timeout) ==="
-run_with_timeout 120 run_in_assembly spades.py \
+echo "=== Stage 16: SPAdes single genome assembly (practical 23) ==="
+run_in_assembly spades.py \
   -s "${WORKDIR}/unknown_enriched.fastq" \
   -o "${WORKDIR}/unknown_genome"
 
@@ -271,62 +276,42 @@ zcat \
   "${WORKDIR}/trimmed/mixed_rev_unpaired.fq.gz" \
   >> "${WORKDIR}/flash_output.extendedFrags.fastq"
 
-echo "=== Stage 18: Metaspades metagenomics assembly (practical 32, with timeout) ==="
-run_with_timeout 120 run_in_assembly metaspades.py -t 8 \
+echo "=== Stage 18: Metaspades metagenomics assembly (practical 32) ==="
+run_in_assembly metaspades.py -t 8 \
   -1 "${WORKDIR}/flash_output.notCombined_1.fastq" \
   -2 "${WORKDIR}/flash_output.notCombined_2.fastq" \
   -s "${WORKDIR}/flash_output.extendedFrags.fastq" \
   -o "${WORKDIR}/mixed_comm_de_novo"
 
-echo "=== Stage 19: MAG binning with MaxBin2 (practical 42, with timeout) ==="
-if [[ -f "${ASSEMBLY_CONTIGS}" ]]; then
-  mkdir -p "${WORKDIR}/maxbin"
-  run_with_timeout 120 run_in_mags run_MaxBin.pl \
-    -thread 8 \
-    -contig "${ASSEMBLY_CONTIGS}" \
-    -out "${WORKDIR}/maxbin/mixed_comm" \
-    -reads "sg_raw_data/out.notCombined_1.fastq" \
-    -reads2 "sg_raw_data/out.notCombined_2.fastq" \
-    -reads3 "sg_raw_data/out.extendedFrags.fastq"
-else
-  echo "WARNING: ${ASSEMBLY_CONTIGS} not found; skipping MaxBin2 (requires a completed overnight metaspades run)"
-fi
+echo "=== Stage 19: MAG binning with MaxBin2 (practical 42) ==="
+mkdir -p "${WORKDIR}/maxbin"
+run_in_mags run_MaxBin.pl \
+  -thread 8 \
+  -contig "${WORKDIR}/mixed_comm_de_novo/contigs.fasta" \
+  -out "${WORKDIR}/maxbin/mixed_comm" \
+  -reads "sg_raw_data/out.notCombined_1.fastq" \
+  -reads2 "sg_raw_data/out.notCombined_2.fastq" \
+  -reads3 "sg_raw_data/out.extendedFrags.fastq"
 
-echo "=== Stage 20: CheckM quality assessment (practical 42, with timeout) ==="
-if ls "${WORKDIR}/maxbin/"*.fasta 1>/dev/null 2>&1; then
-  run_with_timeout 120 run_in_mags checkm taxonomy_wf \
-    domain Bacteria -x fasta \
-    "${WORKDIR}/maxbin/" "${WORKDIR}/checkm/"
-else
-  echo "WARNING: No MaxBin2 bins found; skipping CheckM"
-fi
+echo "=== Stage 20: CheckM quality assessment (practical 42) ==="
+run_in_mags checkm taxonomy_wf \
+  domain Bacteria -x fasta \
+  "${WORKDIR}/maxbin/" "${WORKDIR}/checkm/"
 
 echo "=== Stage 21: GTDB-tk taxonomy classification (practical 42, with timeout) ==="
-if ls "${WORKDIR}/maxbin/"*.fasta 1>/dev/null 2>&1; then
-  run_with_timeout 120 run_in_mags gtdbtk classify_wf \
-    --out_dir "${WORKDIR}/gtdbtk/" \
-    --genome_dir "${WORKDIR}/maxbin/" \
-    -x fasta --skip_ani_screen --cpus 8
-else
-  echo "WARNING: No MaxBin2 bins found; skipping GTDB-tk"
-fi
+run_with_timeout 120 mamba run -n "${MAGS_ENV}" gtdbtk classify_wf \
+  --out_dir "${WORKDIR}/gtdbtk/" \
+  --genome_dir "${WORKDIR}/maxbin/" \
+  -x fasta --skip_ani_screen --cpus 8
 
-echo "=== Stage 22: Prokka gene annotation (practical 42, with timeout) ==="
-if ls "${WORKDIR}/maxbin/"*.fasta 1>/dev/null 2>&1; then
-  MAG_FILE=$(ls "${WORKDIR}/maxbin/"*.fasta | head -n 1)
-  run_with_timeout 120 run_in_mags prokka \
-    --outdir "${WORKDIR}/prokka" \
-    "${MAG_FILE}"
-else
-  echo "WARNING: No MaxBin2 bins found; skipping Prokka"
-fi
+echo "=== Stage 22: Prokka gene annotation (practical 42) ==="
+MAG_FILE=$(ls "${WORKDIR}/maxbin/"*.fasta | head -n 1)
+run_in_mags prokka \
+  --outdir "${WORKDIR}/prokka" \
+  "${MAG_FILE}"
 
 echo "=== Stage 23: Abricate AMR gene screening (practical 42) ==="
-if ls "${WORKDIR}/maxbin/"*.fasta 1>/dev/null 2>&1; then
-  MAG_FILE=$(ls "${WORKDIR}/maxbin/"*.fasta | head -n 1)
-  run_in_mags abricate "${MAG_FILE}"
-else
-  echo "WARNING: No MaxBin2 bins found; skipping abricate"
-fi
+MAG_FILE=$(ls "${WORKDIR}/maxbin/"*.fasta | head -n 1)
+run_in_mags abricate "${MAG_FILE}"
 
 echo "All training environment checks passed."
