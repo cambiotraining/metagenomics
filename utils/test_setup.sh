@@ -289,9 +289,9 @@ run_in_mags run_MaxBin.pl \
   -thread 8 \
   -contig "${WORKDIR}/mixed_comm_de_novo/contigs.fasta" \
   -out "${WORKDIR}/maxbin/mixed_comm" \
-  -reads "sg_raw_data/out.notCombined_1.fastq" \
-  -reads2 "sg_raw_data/out.notCombined_2.fastq" \
-  -reads3 "sg_raw_data/out.extendedFrags.fastq"
+  -reads "${WORKDIR}/flash_output.notCombined_1.fastq" \
+  -reads2 "${WORKDIR}/flash_output.notCombined_2.fastq" \
+  -reads3 "${WORKDIR}/flash_output.extendedFrags.fastq"
 
 echo "=== Stage 20: CheckM quality assessment (practical 42) ==="
 run_in_mags checkm taxonomy_wf \
